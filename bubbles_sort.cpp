@@ -1,37 +1,63 @@
-ï»¿#include <iostream>
+#include <iostream>
 #include <cmath>
 #include <vector>
 #include <algorithm>
 #include <iomanip>
 
+
+#define X 3
+#define Y 3
+
 using namespace std;
 
 int KMPAlgo();
 
-void bubbleSort(int arrSort[], const int SIZE);
+void swap(int& a, int& b)
+{
+	int temp = a;
+	a = b;
+	b = temp;
+}
 
-void bubbleSort(int arrSort[], const int SIZE) {
-	int buffer = 1;
-	int f;
-	for (int i = 0; i < SIZE - 1; i++)
-	{
-		f = 0;
-		for (int j = SIZE - 1; j > i; j--)
-		{
-			if (arrSort[j] < arrSort[j - 1])
-			{
-				buffer = arrSort[j - 1];
-				arrSort[j - 1] = arrSort[j];
-				arrSort[j] = buffer;
-				f = 1;
-			}
-		}
-		if (f == 0)
-			break;
+void print_arr(size_t const x, size_t const y, int arr[][Y])
+{
+	for (int i = 0; i < x; i++) {
+		for (int j = 0; j < y; j++)
+			cout << setw(3) << arr[i][j];
+		cout << '\n';
 	}
 }
 
-// Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼ Ð¢Ñ€Ð°Ð±Ð±Ð°-ÐŸÑ€Ð°Ð´Ð¾-ÐšÐ½ÑƒÑ‚Ð°
+void BubbleSort(size_t const x, size_t const y, int arr[][Y])
+{
+	
+	size_t const arr_len = x * y;
+	
+	for (size_t i = 0; i < arr_len; i++) {
+		
+		for (size_t j = 0; j < x; j++) {
+			
+			for (size_t k = 0; k < y; k++) {
+				size_t next_j = j;
+				size_t next_k = k + 1;
+				if (k == y - 1) {
+					if (j < x - 1) {
+						next_j++;
+						next_k = 0;
+					}
+					else if (j == x - 1) {
+						// Â ñëó÷àå, åñëè ýëåìåíò ïîñëåäíèé, òî âûõîäèì èç öèêëà
+						break;
+					}
+				}
+				if (arr[next_j][next_k] < arr[j][k])
+					swap(arr[j][k], arr[next_j][next_k]);
+			}
+		}
+	}
+}
+
+// àëãîðèòì Òðàááà-Ïðàäî-Êíóòà
 
 int KMPAlgo() {
 
@@ -39,7 +65,7 @@ int KMPAlgo() {
 
 	vector<double> input(11), results(11);
 
-	cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ  11 Ñ‡Ð¸ÑÐµÐ», Ð² Ð¾Ð´Ð½Ñƒ ÑÑ‚Ñ€Ð¾ÐºÑƒ Ð½Ðµ Ð¿ÐµÑ€ÐµÑ…Ð¾Ð´Ñ Ð½Ð° ÑÐ»ÐµÐ´ÑƒÑŽÑ‰ÑƒÑŽ ÑÑ‚Ñ€Ð¾ÐºÑƒ!" << endl;
+	cout << "Ââåäèòå  11 ÷èñåë, â îäíó ñòðîêó íå ïåðåõîäÿ íà ñëåäóþùóþ ñòðîêó!" << endl;
 	for (int i = 0; i < input.size(); i++) {
 		cin >> input[i];
 	}
@@ -50,11 +76,11 @@ int KMPAlgo() {
 		cout << "f( " << setw(3) << input[i] << " ) : ";
 
 		if (results[i] > 400) {
-			cout << "ÐžÑ‡ÐµÐ½ÑŒ Ð±Ð¾Ð»ÑŒÑˆÐ¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾, Ð¿Ñ€ÐµÐ²Ñ‹ÑˆÐ°ÐµÑ‚ Ñ‡Ð¸ÑÐ»Ð¾ 400!" << endl;
+			cout << "Î÷åíü áîëüøîå ÷èñëî, ïðåâûøàåò ÷èñëî 400!" << endl;
 		}
 		else
 		{
-			cout << results[i] <<" " <<"Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð²Ñ‹Ñ‡Ð¸ÑÐ»ÐµÐ½Ð¸Ñ Ð½Ðµ Ð¿Ñ€ÐµÐ²Ñ‹ÑˆÐ°ÐµÑ‚ Ñ‡Ð¸ÑÐ»Ð¾ 400! " << endl;
+			cout << results[i] << " " << "Ðåçóëüòàò âû÷èñëåíèÿ íå ïðåâûøàåò ÷èñëî 400! " << endl;
 		}
 		cout << endl;
 	}
@@ -66,33 +92,21 @@ int main() {
 
 	setlocale(LC_ALL, "Russian");
 
+	int arr[X][Y] = {
+	{ 1, 9, 2 },
+	{ 5, 7, 6 },
+	{ 4, 3, 8 }
+};
+	
+	print_arr(X, Y, arr);
+	BubbleSort(X, Y, arr);
+	cout << "Âûâîä îòñîðòèðîâàííîãî ìàñèâà:\n";
+	print_arr(X, Y, arr);
+
 	int a;
-
-	const int SIZE = 11;
-
-	int arr[SIZE] = { 1,9,2,5,7,6,4,3,8 };
-
-	cout << "Ð’Ñ‹Ð²Ð¾Ð´ Ð¼Ð°ÑÑÐ¸Ð²Ð°: " << endl;
-
-	for (int i = 0; i < SIZE; i++)
-	{
-		cout << arr[i] << endl;
-	}
-	cout << " " << endl;
-
-	bubbleSort(arr, SIZE);
-
-	cout << "Ð’Ñ‹Ð²Ð¾Ð´ Ð¾Ñ‚ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð¾Ð³Ð¾ Ð¼Ð°ÑÐ¸Ð²Ð°:\n";
-	for (int i = 0; i < SIZE; i++)
-	{
-		cout << arr[i] << endl;
-	}
-
-	cout << "Ð’Ñ‹Ð²Ð¾Ð´ Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð° Ð¢Ñ€Ð°Ð±Ð±Ð°-ÐŸÐ°Ñ€Ð´Ð¾-ÐšÐ½ÑƒÑ‚Ð°: " << endl;
+	cout << "Âûâîä àëãîðèòìà Òðàááà-Ïàðäî-Êíóòà: " << endl;
 	KMPAlgo();
 	cin >> a;
 
 	return 0;
 }
-
-
